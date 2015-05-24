@@ -26,3 +26,7 @@ func NewClipboard(path string) (*Clipboard, error) {
 func (c *Clipboard) Get(label string) string {
 	return c.storage[label]
 }
+
+func (c *Clipboard) Set(label, data string) {
+	c.storage[label] = data
+}
