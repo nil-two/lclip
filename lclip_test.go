@@ -24,6 +24,16 @@ func TestMain(m *testing.M) {
 	os.Remove(tempPath)
 }
 
+type GetTextTest struct {
+	Src string
+	Dst string
+}
+
+var indexTestsGetText = []GetTextTest{
+	{Src: "foo", Dst: "bar"},
+	{Src: "hoge", Dst: "piyo"},
+}
+
 func TestGetText(t *testing.T) {
 	tempData := []byte(`
 {"foo": "bar", "hoge": "piyo"}
@@ -36,19 +46,12 @@ func TestGetText(t *testing.T) {
 	if err != nil {
 		t.Errorf("NewClipboard returns %q; want nil", err)
 	}
-	src := "foo"
-	actual := c.Get(src)
-	expect := "bar"
-	if actual != expect {
-		t.Errorf("Get(%q) = %q; want %q",
-			src, actual, expect)
-	}
-
-	src = "hoge"
-	actual = c.Get(src)
-	expect = "piyo"
-	if actual != expect {
-		t.Errorf("Get(%q) = %q; want %q",
-			src, actual, expect)
+	for _, test := range indexTestsGetText {
+		actual := c.Get(test.Src)
+		expect := test.Dst
+		if actual != expect {
+			t.Errorf("Get(%q) = %q; want %q",
+				test.Src, actual, expect)
+		}
 	}
 }
