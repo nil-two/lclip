@@ -6,7 +6,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"testing"
+
+	"github.com/mitchellh/go-homedir"
 )
 
 var tempPath string
@@ -24,6 +27,22 @@ func TestMain(m *testing.M) {
 	defer os.Exit(e)
 
 	os.Remove(tempPath)
+}
+
+func TestDefaultPath(t *testing.T) {
+	h, err := homedir.Dir()
+	if err != nil {
+		t.Fatal(err)
+	}
+	expect := filepath.Join(h, ".lclip.json")
+	actual, err := DefaultPath()
+	if err != nil {
+		t.Errorf("DefaultPath returns %q; want nil", err)
+	}
+	if actual != expect {
+		t.Errorf("DefaultPath = %q; want %q",
+			actual, expect)
+	}
 }
 
 type GetTextTest struct {
