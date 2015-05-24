@@ -62,3 +62,33 @@ func TestGetText(t *testing.T) {
 		}
 	}
 }
+
+type SetTextTest struct {
+	Label string
+	Data  string
+}
+
+var indexTestsSetText = []SetTextTest{
+	{Label: "a", Data: "aaa"},
+}
+
+func TestSetText(t *testing.T) {
+	if err := ioutil.WriteFile(tempPath, []byte(`{}`), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	c, err := NewClipboard(tempPath)
+	if err != nil {
+		t.Errorf("NewClipboard returns %q; want nil", err)
+	}
+	for _, test := range indexTestsSetText {
+		c.Set(test.Label, test.Data)
+		actual := c.Get(test.Label)
+		expect := test.Data
+		if actual != expect {
+			t.Errorf("after Set(%q, %q), Get(%q) = %q; want %q",
+				test.Label, test.Data,
+				test.Label, actual, expect)
+		}
+	}
+}
