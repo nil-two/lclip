@@ -17,6 +17,7 @@ func DefaultPath() (string, error) {
 }
 
 type Clipboard struct {
+	path    string
 	storage map[string]string
 }
 
@@ -27,7 +28,7 @@ func NewClipboard(path string) (*Clipboard, error) {
 	}
 	defer f.Close()
 
-	c := &Clipboard{}
+	c := &Clipboard{path: path}
 	if err = json.NewDecoder(f).Decode(&c.storage); err != nil {
 		return nil, err
 	}
@@ -40,4 +41,12 @@ func (c *Clipboard) Get(label string) string {
 
 func (c *Clipboard) Set(label, data string) {
 	c.storage[label] = data
+}
+
+func (c *Clipboard) Close() error {
+	f, err := os.Create(c.path)
+	if err != nil {
+		return err
+	}
+	return json.NewEncoder(f).Encode(&c.storage)
 }
