@@ -3,7 +3,18 @@ package lclip
 import (
 	"encoding/json"
 	"os"
+	"path/filepath"
+
+	"github.com/mitchellh/go-homedir"
 )
+
+func DefaultPath() (string, error) {
+	h, err := homedir.Dir()
+	if err != nil {
+		return "", err
+	}
+	return filepath.Join(h, ".lclip.json"), nil
+}
 
 type Clipboard struct {
 	storage map[string]string
