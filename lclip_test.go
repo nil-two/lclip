@@ -70,6 +70,8 @@ type SetTextTest struct {
 
 var indexTestsSetText = []SetTextTest{
 	{Label: "a", Data: "aaa"},
+	{Label: "abc", Data: "def"},
+	{Label: "", Data: ""},
 }
 
 func TestSetText(t *testing.T) {
