@@ -26,7 +26,7 @@ func TestMain(m *testing.M) {
 
 func TestGetText(t *testing.T) {
 	tempData := []byte(`
-{"foo": "bar"}
+{"foo": "bar", "hoge": "piyo"}
 `[1:])
 	if err := ioutil.WriteFile(tempPath, tempData, 0644); err != nil {
 		t.Fatal(err)
@@ -39,6 +39,14 @@ func TestGetText(t *testing.T) {
 	src := "foo"
 	actual := c.Get(src)
 	expect := "bar"
+	if actual != expect {
+		t.Errorf("Get(%q) = %q; want %q",
+			src, actual, expect)
+	}
+
+	src = "hoge"
+	actual = c.Get(src)
+	expect = "piyo"
 	if actual != expect {
 		t.Errorf("Get(%q) = %q; want %q",
 			src, actual, expect)
