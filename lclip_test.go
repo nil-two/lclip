@@ -118,6 +118,7 @@ func TestSetText(t *testing.T) {
 
 var indexTestsLabels = [][]string{
 	{"foo", "bar", "baz"},
+	{"hoge", "piyo", "fuga"},
 }
 
 func TestListLabels(t *testing.T) {
