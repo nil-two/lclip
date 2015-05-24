@@ -1,6 +1,8 @@
 package lclip
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -35,10 +37,15 @@ var indexTestsGetText = []GetTextTest{
 }
 
 func TestGetText(t *testing.T) {
-	tempData := []byte(`
-{"foo": "bar", "hoge": "piyo"}
-`[1:])
-	if err := ioutil.WriteFile(tempPath, tempData, 0644); err != nil {
+	w := bytes.NewBuffer(make([]byte, 0))
+	m := make(map[string]string)
+	for _, test := range indexTestsGetText {
+		m[test.Src] = test.Dst
+	}
+	if err := json.NewEncoder(w).Encode(m); err != nil {
+		t.Fatal(err)
+	}
+	if err := ioutil.WriteFile(tempPath, w.Bytes(), 0644); err != nil {
 		t.Fatal(err)
 	}
 
