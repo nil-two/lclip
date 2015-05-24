@@ -74,6 +74,7 @@ func TestGetText(t *testing.T) {
 	if err != nil {
 		t.Errorf("NewClipboard returns %q; want nil", err)
 	}
+	defer c.Close()
 	for _, test := range indexTestsGetText {
 		expect := test.Dst
 		actual := c.Get(test.Src)
@@ -104,6 +105,7 @@ func TestSetText(t *testing.T) {
 	if err != nil {
 		t.Errorf("NewClipboard returns %q; want nil", err)
 	}
+	defer c.Close()
 	for _, test := range indexTestsSetText {
 		c.Set(test.Label, test.Data)
 		expect := test.Data
@@ -143,6 +145,9 @@ func TestListLabels(t *testing.T) {
 		if !reflect.DeepEqual(actual, expect) {
 			t.Errorf("got %q; want %q", actual, expect)
 		}
+		if err := c.Close(); err != nil {
+			t.Error("Close returns %q; want nil", err)
+		}
 	}
 }
 
@@ -167,6 +172,7 @@ func TestSaveText(t *testing.T) {
 		if err != nil {
 			t.Errorf("NewClipboard returns %q; want nil", err)
 		}
+		defer c.Close()
 		expect := v
 		actual := c.Get(k)
 		if actual != expect {
