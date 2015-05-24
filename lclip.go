@@ -43,6 +43,10 @@ func (c *Clipboard) Set(label, data string) {
 	c.storage[label] = data
 }
 
+func (c *Clipboard) Labels() []string {
+	return []string{}
+}
+
 func (c *Clipboard) Close() error {
 	f, err := os.Create(c.path)
 	if err != nil {
