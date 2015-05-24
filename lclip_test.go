@@ -113,3 +113,33 @@ func TestSetText(t *testing.T) {
 		}
 	}
 }
+
+func TestSaveText(t *testing.T) {
+	if err := ioutil.WriteFile(tempPath, []byte(`{}`), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	k, v := "key", "value"
+	{
+		c, err := NewClipboard(tempPath)
+		if err != nil {
+			t.Errorf("NewClipboard returns %q; want nil", err)
+		}
+		c.Set(k, v)
+		if err := c.Close(); err != nil {
+			t.Error("Close returns %q; want nil", err)
+		}
+	}
+	{
+		c, err := NewClipboard(tempPath)
+		if err != nil {
+			t.Errorf("NewClipboard returns %q; want nil", err)
+		}
+		expect := v
+		actual := c.Get(k)
+		if actual != expect {
+			t.Errorf("Get(%q) = %q; want %q",
+				k, actual, expect)
+		}
+	}
+}
