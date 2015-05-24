@@ -47,6 +47,38 @@ func TestDefaultPath(t *testing.T) {
 	}
 }
 
+func TestCreateStorageFileIfNotExists(t *testing.T) {
+	f, err := ioutil.TempFile(os.TempDir(), "test")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err = f.Close(); err != nil {
+		t.Fatal(err)
+	}
+
+	path := f.Name()
+	if err = os.Remove(path); err != nil {
+		t.Fatal(err)
+	}
+	defer os.Remove(path)
+
+	c, err := NewClipboard(path)
+	if err != nil {
+		t.Errorf("NewClipboard returns %q; want nil", err)
+	}
+	defer c.Close()
+
+	expect := []byte("{}\n")
+	actual, err := ioutil.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !reflect.DeepEqual(actual, expect) {
+		t.Errorf("got %q; want %q",
+			actual, expect)
+	}
+}
+
 type GetTextTest struct {
 	Src string
 	Dst string
