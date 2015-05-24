@@ -44,7 +44,11 @@ func (c *Clipboard) Set(label, data string) {
 }
 
 func (c *Clipboard) Labels() []string {
-	return []string{"foo", "bar", "baz"}
+	a := make([]string, 0, len(c.storage))
+	for label, _ := range c.storage {
+		a = append(a, label)
+	}
+	return a
 }
 
 func (c *Clipboard) Close() error {
