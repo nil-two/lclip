@@ -7,6 +7,8 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"reflect"
+	"sort"
 	"testing"
 
 	"github.com/mitchellh/go-homedir"
@@ -110,6 +112,35 @@ func TestSetText(t *testing.T) {
 			t.Errorf("after Set(%q, %q), Get(%q) = %q; want %q",
 				test.Label, test.Data,
 				test.Label, actual, expect)
+		}
+	}
+}
+
+var indexTestsLabels = [][]string{
+	{"foo", "bar", "baz"},
+}
+
+func TestListLabels(t *testing.T) {
+	empty := []byte(`{}`)
+	for _, labels := range indexTestsLabels {
+		if err := ioutil.WriteFile(tempPath, empty, 0644); err != nil {
+			t.Fatal(err)
+		}
+
+		c, err := NewClipboard(tempPath)
+		if err != nil {
+			t.Errorf("NewClipboard returns %q; want nil", err)
+		}
+		for _, label := range labels {
+			c.Set(label, "")
+		}
+
+		expect := append(make([]string, 0, len(labels)), labels...)
+		actual := c.Labels()
+		sort.Strings(expect)
+		sort.Strings(actual)
+		if !reflect.DeepEqual(actual, expect) {
+			t.Errorf("got %q; want %q", actual, expect)
 		}
 	}
 }
