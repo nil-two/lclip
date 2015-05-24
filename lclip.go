@@ -44,7 +44,7 @@ func (c *Clipboard) Set(label, data string) {
 }
 
 func (c *Clipboard) Labels() []string {
-	return []string{}
+	return []string{"foo", "bar", "baz"}
 }
 
 func (c *Clipboard) Close() error {
