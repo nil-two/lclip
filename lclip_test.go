@@ -54,8 +54,8 @@ func TestGetText(t *testing.T) {
 		t.Errorf("NewClipboard returns %q; want nil", err)
 	}
 	for _, test := range indexTestsGetText {
-		actual := c.Get(test.Src)
 		expect := test.Dst
+		actual := c.Get(test.Src)
 		if actual != expect {
 			t.Errorf("Get(%q) = %q; want %q",
 				test.Src, actual, expect)
@@ -85,8 +85,8 @@ func TestSetText(t *testing.T) {
 	}
 	for _, test := range indexTestsSetText {
 		c.Set(test.Label, test.Data)
-		actual := c.Get(test.Label)
 		expect := test.Data
+		actual := c.Get(test.Label)
 		if actual != expect {
 			t.Errorf("after Set(%q, %q), Get(%q) = %q; want %q",
 				test.Label, test.Data,
