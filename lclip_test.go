@@ -178,7 +178,7 @@ func TestListLabels(t *testing.T) {
 			t.Errorf("got %q; want %q", actual, expect)
 		}
 		if err := c.Close(); err != nil {
-			t.Error("Close returns %q; want nil", err)
+			t.Errorf("Close returns %q; want nil", err)
 		}
 	}
 }
@@ -196,7 +196,7 @@ func TestSaveText(t *testing.T) {
 		}
 		c.Set(k, v)
 		if err := c.Close(); err != nil {
-			t.Error("Close returns %q; want nil", err)
+			t.Errorf("Close returns %q; want nil", err)
 		}
 	}
 	{
