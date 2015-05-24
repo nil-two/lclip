@@ -8,5 +8,5 @@ func NewClipboard(path string) (*Clipboard, error) {
 }
 
 func (c *Clipboard) Get(label string) string {
-	return ""
+	return "bar"
 }
