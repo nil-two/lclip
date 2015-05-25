@@ -1,22 +1,17 @@
 package lclip
 
 import (
-	"encoding/json"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
+	_ "github.com/mattn/go-sqlite3"
 	"github.com/mitchellh/go-homedir"
+	"github.com/naoina/genmai"
 )
 
 func exists(path string) bool {
 	_, err := os.Stat(path)
 	return err == nil
-}
-
-func createStorageFile(path string) error {
-	empty := []byte("{}\n")
-	return ioutil.WriteFile(path, empty, 0644)
 }
 
 func DefaultPath() (string, error) {
@@ -27,28 +22,28 @@ func DefaultPath() (string, error) {
 	return filepath.Join(h, ".lclip.db"), nil
 }
 
+type Variable struct {
+	Label string `db:"pk"`
+	Data  []byte
+}
+
 type Clipboard struct {
-	path    string
-	storage map[string][]byte
+	path string
+	db   *genmai.DB
 }
 
 func NewClipboard(path string) (*Clipboard, error) {
-	if !exists(path) {
-		if err := createStorageFile(path); err != nil {
-			return nil, err
-		}
-	}
-	f, err := os.Open(path)
+	db, err := genmai.New(&genmai.SQLite3Dialect{}, path)
 	if err != nil {
 		return nil, err
 	}
-	defer f.Close()
-
-	c := &Clipboard{path: path}
-	if err = json.NewDecoder(f).Decode(&c.storage); err != nil {
+	if err = db.CreateTableIfNotExists(&Variable{}); err != nil {
 		return nil, err
 	}
-	return c, nil
+	return &Clipboard{
+		path: path,
+		db:   db,
+	}, nil
 }
 
 func NewClipboardWithDefaultPath() (*Clipboard, error) {
@@ -63,27 +58,54 @@ func (c *Clipboard) Path() string {
 	return c.path
 }
 
+func (c *Clipboard) searchVariable(label string) (*Variable, error) {
+	res := make([]Variable, 0, 1)
+	err := c.db.Select(&res, c.db.Where("label", "=", label))
+	if err != nil {
+		return nil, err
+	}
+	if len(res) < 1 {
+		return nil, nil
+	}
+	return &res[0], nil
+}
+
 func (c *Clipboard) Get(label string) ([]byte, error) {
-	return c.storage[label], nil
+	v, err := c.searchVariable(label)
+	if err != nil {
+		return nil, err
+	}
+	if v == nil {
+		return []byte(``), nil
+	}
+	return v.Data, nil
 }
 
 func (c *Clipboard) Set(label string, data []byte) error {
-	c.storage[label] = data
-	return nil
-}
-
-func (c *Clipboard) Labels() []string {
-	a := make([]string, 0, len(c.storage))
-	for label, _ := range c.storage {
-		a = append(a, label)
-	}
-	return a
-}
-
-func (c *Clipboard) Close() error {
-	f, err := os.Create(c.path)
+	v, err := c.searchVariable(label)
 	if err != nil {
 		return err
 	}
-	return json.NewEncoder(f).Encode(&c.storage)
+	if v == nil {
+		_, err = c.db.Insert(&Variable{Label: label, Data: data})
+		return err
+	}
+	_, err = c.db.Update(&Variable{Label: v.Label, Data: data})
+	return err
+}
+
+func (c *Clipboard) Labels() []string {
+	res := make([]Variable, 0)
+	if err := c.db.Select(&res); err != nil {
+		return nil
+	}
+	labels := make([]string, len(res))
+	for i := 0; i < len(res); i++ {
+		labels[i] = res[i].Label
+	}
+	return labels
+}
+
+func (c *Clipboard) Close() error {
+	return c.db.Close()
 }
