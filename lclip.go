@@ -29,7 +29,7 @@ func DefaultPath() (string, error) {
 
 type Clipboard struct {
 	path    string
-	storage map[string]string
+	storage map[string][]byte
 }
 
 func NewClipboard(path string) (*Clipboard, error) {
@@ -51,11 +51,11 @@ func NewClipboard(path string) (*Clipboard, error) {
 	return c, nil
 }
 
-func (c *Clipboard) Get(label string) string {
+func (c *Clipboard) Get(label string) []byte {
 	return c.storage[label]
 }
 
-func (c *Clipboard) Set(label, data string) {
+func (c *Clipboard) Set(label string, data []byte) {
 	c.storage[label] = data
 }
 
