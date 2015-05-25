@@ -106,6 +106,18 @@ func (c *Clipboard) Labels() ([]string, error) {
 	return labels, nil
 }
 
+func (c *Clipboard) Delete(label string) error {
+	v, err := c.searchVariable(label)
+	if err != nil {
+		return err
+	}
+	if v == nil {
+		return nil
+	}
+	_, err = c.db.Delete(v)
+	return nil
+}
+
 func (c *Clipboard) Close() error {
 	return c.db.Close()
 }
