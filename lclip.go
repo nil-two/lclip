@@ -24,7 +24,7 @@ func DefaultPath() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return filepath.Join(h, ".lclip.json"), nil
+	return filepath.Join(h, ".lclip.db"), nil
 }
 
 type Clipboard struct {
