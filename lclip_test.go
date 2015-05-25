@@ -81,17 +81,17 @@ func TestCreateStorageFileIfNotExists(t *testing.T) {
 
 type GetTextTest struct {
 	Src string
-	Dst string
+	Dst []byte
 }
 
 var indexTestsGetText = []GetTextTest{
-	{Src: "foo", Dst: "bar"},
-	{Src: "hoge", Dst: "piyo"},
+	{Src: "foo", Dst: []byte("bar")},
+	{Src: "hoge", Dst: []byte("piyo")},
 }
 
 func TestGetText(t *testing.T) {
 	w := bytes.NewBuffer(make([]byte, 0))
-	m := make(map[string]string)
+	m := make(map[string][]byte)
 	for _, test := range indexTestsGetText {
 		m[test.Src] = test.Dst
 	}
@@ -110,7 +110,7 @@ func TestGetText(t *testing.T) {
 	for _, test := range indexTestsGetText {
 		expect := test.Dst
 		actual := c.Get(test.Src)
-		if actual != expect {
+		if !reflect.DeepEqual(actual, expect) {
 			t.Errorf("Get(%q) = %q; want %q",
 				test.Src, actual, expect)
 		}
@@ -119,13 +119,13 @@ func TestGetText(t *testing.T) {
 
 type SetTextTest struct {
 	Label string
-	Data  string
+	Data  []byte
 }
 
 var indexTestsSetText = []SetTextTest{
-	{Label: "a", Data: "aaa"},
-	{Label: "abc", Data: "def"},
-	{Label: "", Data: ""},
+	{Label: "a", Data: []byte("aaa")},
+	{Label: "abc", Data: []byte("def")},
+	{Label: "", Data: []byte("")},
 }
 
 func TestSetText(t *testing.T) {
@@ -142,7 +142,7 @@ func TestSetText(t *testing.T) {
 		c.Set(test.Label, test.Data)
 		expect := test.Data
 		actual := c.Get(test.Label)
-		if actual != expect {
+		if !reflect.DeepEqual(actual, expect) {
 			t.Errorf("after Set(%q, %q), Get(%q) = %q; want %q",
 				test.Label, test.Data,
 				test.Label, actual, expect)
@@ -167,7 +167,7 @@ func TestListLabels(t *testing.T) {
 			t.Errorf("NewClipboard returns %q; want nil", err)
 		}
 		for _, label := range labels {
-			c.Set(label, "")
+			c.Set(label, []byte(``))
 		}
 
 		expect := append(make([]string, 0, len(labels)), labels...)
@@ -188,7 +188,7 @@ func TestSaveText(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	k, v := "key", "value"
+	k, v := "key", []byte("value")
 	{
 		c, err := NewClipboard(tempPath)
 		if err != nil {
@@ -207,7 +207,7 @@ func TestSaveText(t *testing.T) {
 		defer c.Close()
 		expect := v
 		actual := c.Get(k)
-		if actual != expect {
+		if !reflect.DeepEqual(actual, expect) {
 			t.Errorf("Get(%q) = %q; want %q",
 				k, actual, expect)
 		}
