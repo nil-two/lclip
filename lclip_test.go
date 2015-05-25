@@ -1,8 +1,6 @@
 package lclip
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -48,10 +46,7 @@ func TestDefaultPath(t *testing.T) {
 }
 
 func TestCreateStorageFileIfNotExists(t *testing.T) {
-	if err := os.Remove(tempPath); err != nil {
-		t.Fatal(err)
-	}
-	defer os.Remove(tempPath)
+	os.Remove(tempPath)
 
 	c, err := NewClipboard(tempPath)
 	if err != nil {
@@ -75,21 +70,14 @@ var indexTestsGetText = []GetTextTest{
 }
 
 func TestGetText(t *testing.T) {
-	w := bytes.NewBuffer(make([]byte, 0))
-	m := make(map[string][]byte)
-	for _, test := range indexTestsGetText {
-		m[test.Src] = test.Dst
-	}
-	if err := json.NewEncoder(w).Encode(m); err != nil {
-		t.Fatal(err)
-	}
-	if err := ioutil.WriteFile(tempPath, w.Bytes(), 0644); err != nil {
-		t.Fatal(err)
-	}
+	os.Remove(tempPath)
 
 	c, err := NewClipboard(tempPath)
 	if err != nil {
 		t.Fatal(err)
+	}
+	for _, test := range indexTestsGetText {
+		c.Set(test.Src, test.Dst)
 	}
 	defer c.Close()
 	for _, test := range indexTestsGetText {
@@ -114,9 +102,7 @@ var indexTestsSetText = []SetTextTest{
 }
 
 func TestSetText(t *testing.T) {
-	if err := ioutil.WriteFile(tempPath, []byte(`{}`), 0644); err != nil {
-		t.Fatal(err)
-	}
+	os.Remove(tempPath)
 
 	c, err := NewClipboard(tempPath)
 	if err != nil {
@@ -141,11 +127,8 @@ var indexTestsLabels = [][]string{
 }
 
 func TestListLabels(t *testing.T) {
-	empty := []byte(`{}`)
 	for _, labels := range indexTestsLabels {
-		if err := ioutil.WriteFile(tempPath, empty, 0644); err != nil {
-			t.Fatal(err)
-		}
+		os.Remove(tempPath)
 
 		c, err := NewClipboard(tempPath)
 		if err != nil {
@@ -169,9 +152,7 @@ func TestListLabels(t *testing.T) {
 }
 
 func TestSaveText(t *testing.T) {
-	if err := ioutil.WriteFile(tempPath, []byte(`{}`), 0644); err != nil {
-		t.Fatal(err)
-	}
+	os.Remove(tempPath)
 
 	k, v := "key", []byte("value")
 	{
