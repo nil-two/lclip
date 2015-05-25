@@ -59,46 +59,15 @@ func TestCreateStorageFileIfNotExists(t *testing.T) {
 	}
 }
 
-type GetTextTest struct {
-	Src string
-	Dst []byte
-}
-
-var indexTestsGetText = []GetTextTest{
-	{Src: "foo", Dst: []byte("bar")},
-	{Src: "hoge", Dst: []byte("piyo")},
-}
-
-func TestGetText(t *testing.T) {
-	os.Remove(tempPath)
-
-	c, err := NewClipboard(tempPath)
-	if err != nil {
-		t.Fatal(err)
-	}
-	for _, test := range indexTestsGetText {
-		c.Set(test.Src, test.Dst)
-	}
-	defer c.Close()
-	for _, test := range indexTestsGetText {
-		expect := test.Dst
-		actual := c.Get(test.Src)
-		if !reflect.DeepEqual(actual, expect) {
-			t.Errorf("Get(%q) = %q; want %q",
-				test.Src, actual, expect)
-		}
-	}
-}
-
-type SetTextTest struct {
+type AccessTest struct {
 	Label string
 	Data  []byte
 }
 
-var indexTestsSetText = []SetTextTest{
-	{Label: "a", Data: []byte("aaa")},
-	{Label: "abc", Data: []byte("def")},
-	{Label: "", Data: []byte("")},
+var indexTestsAccess = []AccessTest{
+	{Label: "foo", Data: []byte("bar")},
+	{Label: "hoge", Data: []byte("piyo")},
+	{Label: "日本語", Data: []byte("日本語")},
 }
 
 func TestSetText(t *testing.T) {
@@ -109,7 +78,7 @@ func TestSetText(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer c.Close()
-	for _, test := range indexTestsSetText {
+	for _, test := range indexTestsAccess {
 		c.Set(test.Label, test.Data)
 		expect := test.Data
 		actual := c.Get(test.Label)
