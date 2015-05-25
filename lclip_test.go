@@ -120,16 +120,17 @@ func TestListLabels(t *testing.T) {
 	}
 }
 
-func TestSaveText(t *testing.T) {
+func TestSave(t *testing.T) {
 	os.Remove(tempPath)
 
-	k, v := "key", []byte("value")
 	{
 		c, err := NewClipboard(tempPath)
 		if err != nil {
 			t.Fatal(err)
 		}
-		c.Set(k, v)
+		for _, test := range indexTestsAccess {
+			c.Set(test.Label, test.Data)
+		}
 		if err := c.Close(); err != nil {
 			t.Fatal(err)
 		}
@@ -140,11 +141,13 @@ func TestSaveText(t *testing.T) {
 			t.Fatal(err)
 		}
 		defer c.Close()
-		expect := v
-		actual := c.Get(k)
-		if !reflect.DeepEqual(actual, expect) {
-			t.Errorf("Get(%q) = %q; want %q",
-				k, actual, expect)
+		for _, test := range indexTestsAccess {
+			expect := test.Data
+			actual := c.Get(test.Label)
+			if !reflect.DeepEqual(actual, expect) {
+				t.Errorf("Get(%q) = %q; want %q",
+					test.Label, actual, expect)
+			}
 		}
 	}
 }
