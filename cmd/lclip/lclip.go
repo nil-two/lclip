@@ -13,16 +13,14 @@ import (
 
 func usage() {
 	os.Stderr.WriteString(`
-cli interface for labeled clipboard.
-
-Commands:
-	lclip [ -g | --get ] LABEL           # Paste text from LABEL
-	lclip [ -s | --set ] LABEL [FILE]... # Copy text to LABEL
-	lclip [ -l | --labels ]              # List labels
-	lclip [ -d | --delete ] [LABEL]...   # Delete LABEL(s)
-
-	lclip [ -h | --help ]                # Show this help message
-	lclip [ -v | --version ]             # Print the version
+usage: lclip <operation> [...]
+operations:
+	lclip {-h --help}
+	lclip {-v --version}
+	lclip {-l --labels}                    # List labels
+	lclip {-g --get}     <label>           # Paste text from label
+	lclip {-s --set}     <label> [file(s)] # Copy text to label
+	lclip {-d --delete}  <label(s)>        # Delete label(s)
 `[1:])
 }
 
