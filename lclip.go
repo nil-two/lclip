@@ -51,12 +51,13 @@ func NewClipboard(path string) (*Clipboard, error) {
 	return c, nil
 }
 
-func (c *Clipboard) Get(label string) []byte {
-	return c.storage[label]
+func (c *Clipboard) Get(label string) ([]byte, error) {
+	return c.storage[label], nil
 }
 
-func (c *Clipboard) Set(label string, data []byte) {
+func (c *Clipboard) Set(label string, data []byte) error {
 	c.storage[label] = data
+	return nil
 }
 
 func (c *Clipboard) Labels() []string {
