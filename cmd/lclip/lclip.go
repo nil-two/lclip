@@ -30,7 +30,7 @@ v0.3.0
 `[1:])
 }
 
-func cmd_get(args []string) error {
+func cmdGet(args []string) error {
 	if len(args) < 1 {
 		return fmt.Errorf("no specify LABEL")
 	}
@@ -52,7 +52,7 @@ func cmd_get(args []string) error {
 	return nil
 }
 
-func cmd_set(args []string) error {
+func cmdSet(args []string) error {
 	if len(args) < 1 {
 		return fmt.Errorf("no specify LABEL")
 	}
@@ -76,7 +76,7 @@ func cmd_set(args []string) error {
 	return c.Set(label, src)
 }
 
-func cmd_labels() error {
+func cmdLabels() error {
 	c, err := lclip.NewClipboardWithDefaultPath()
 	if err != nil {
 		return err
@@ -94,7 +94,7 @@ func cmd_labels() error {
 	return nil
 }
 
-func cmd_delete(args []string) error {
+func cmdDelete(args []string) error {
 	if len(args) < 1 {
 		return fmt.Errorf("no specify LABEL")
 	}
@@ -144,13 +144,13 @@ func _main() error {
 		version()
 		return nil
 	case isGet:
-		return cmd_get(flag.Args())
+		return cmdGet(flag.Args())
 	case isSet:
-		return cmd_set(flag.Args())
+		return cmdSet(flag.Args())
 	case isLabels:
-		return cmd_labels()
+		return cmdLabels()
 	case isDelete:
-		return cmd_delete(flag.Args())
+		return cmdDelete(flag.Args())
 	}
 	usage()
 	return nil
