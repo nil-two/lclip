@@ -64,7 +64,7 @@ func TestCreateStorageFileIfNotExists(t *testing.T) {
 
 	c, err := NewClipboard(path)
 	if err != nil {
-		t.Errorf("NewClipboard returns %q; want nil", err)
+		t.Fatal(err)
 	}
 	defer c.Close()
 
@@ -104,7 +104,7 @@ func TestGetText(t *testing.T) {
 
 	c, err := NewClipboard(tempPath)
 	if err != nil {
-		t.Errorf("NewClipboard returns %q; want nil", err)
+		t.Fatal(err)
 	}
 	defer c.Close()
 	for _, test := range indexTestsGetText {
@@ -135,7 +135,7 @@ func TestSetText(t *testing.T) {
 
 	c, err := NewClipboard(tempPath)
 	if err != nil {
-		t.Errorf("NewClipboard returns %q; want nil", err)
+		t.Fatal(err)
 	}
 	defer c.Close()
 	for _, test := range indexTestsSetText {
@@ -164,7 +164,7 @@ func TestListLabels(t *testing.T) {
 
 		c, err := NewClipboard(tempPath)
 		if err != nil {
-			t.Errorf("NewClipboard returns %q; want nil", err)
+			t.Fatal(err)
 		}
 		for _, label := range labels {
 			c.Set(label, []byte(``))
@@ -178,7 +178,7 @@ func TestListLabels(t *testing.T) {
 			t.Errorf("got %q; want %q", actual, expect)
 		}
 		if err := c.Close(); err != nil {
-			t.Errorf("Close returns %q; want nil", err)
+			t.Fatal(err)
 		}
 	}
 }
@@ -192,17 +192,17 @@ func TestSaveText(t *testing.T) {
 	{
 		c, err := NewClipboard(tempPath)
 		if err != nil {
-			t.Errorf("NewClipboard returns %q; want nil", err)
+			t.Fatal(err)
 		}
 		c.Set(k, v)
 		if err := c.Close(); err != nil {
-			t.Errorf("Close returns %q; want nil", err)
+			t.Fatal(err)
 		}
 	}
 	{
 		c, err := NewClipboard(tempPath)
 		if err != nil {
-			t.Errorf("NewClipboard returns %q; want nil", err)
+			t.Fatal(err)
 		}
 		defer c.Close()
 		expect := v
