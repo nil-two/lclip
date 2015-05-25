@@ -48,34 +48,19 @@ func TestDefaultPath(t *testing.T) {
 }
 
 func TestCreateStorageFileIfNotExists(t *testing.T) {
-	f, err := ioutil.TempFile(os.TempDir(), "test")
-	if err != nil {
+	if err := os.Remove(tempPath); err != nil {
 		t.Fatal(err)
 	}
-	if err = f.Close(); err != nil {
-		t.Fatal(err)
-	}
+	defer os.Remove(tempPath)
 
-	path := f.Name()
-	if err = os.Remove(path); err != nil {
-		t.Fatal(err)
-	}
-	defer os.Remove(path)
-
-	c, err := NewClipboard(path)
+	c, err := NewClipboard(tempPath)
 	if err != nil {
 		t.Fatal(err)
 	}
 	defer c.Close()
 
-	expect := []byte("{}\n")
-	actual, err := ioutil.ReadFile(path)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if !reflect.DeepEqual(actual, expect) {
-		t.Errorf("got %q; want %q",
-			actual, expect)
+	if _, err := os.Stat(tempPath); err != nil {
+		t.Error("not create storage file; want create")
 	}
 }
 
