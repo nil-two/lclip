@@ -45,6 +45,24 @@ func TestDefaultPath(t *testing.T) {
 	}
 }
 
+func TestNewWithDefaultPath(t *testing.T) {
+	h, err := homedir.Dir()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	c, err := NewClipboardWithDefaultPath()
+	if err != nil {
+		t.Fatal(err)
+	}
+	expect := filepath.Join(h, ".lclip.db")
+	actual := c.Path()
+	if actual != expect {
+		t.Errorf("DefaultPath = %q; want %q",
+			actual, expect)
+	}
+}
+
 func TestCreateStorageFileIfNotExists(t *testing.T) {
 	os.Remove(tempPath)
 
