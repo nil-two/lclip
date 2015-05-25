@@ -19,6 +19,7 @@ Commands:
 	lclip [ -g | --get ] LABEL           # Paste text from LABEL
 	lclip [ -s | --set ] LABEL [FILE]... # Copy text to LABEL
 	lclip [ -l | --labels ]              # List labels
+	lclip [ -d | --delete ] [LABEL]...   # Delete LABEL(s)
 
 	lclip [ -h | --help ]                # Show this help message
 	lclip [ -v | --version ]             # Print the version
@@ -95,6 +96,26 @@ func cmd_labels() error {
 	return nil
 }
 
+func cmd_delete(args []string) error {
+	if len(args) < 1 {
+		return fmt.Errorf("no specify LABEL")
+	}
+	labels := args
+
+	c, err := lclip.NewClipboardWithDefaultPath()
+	if err != nil {
+		return err
+	}
+	defer c.Close()
+
+	for _, label := range labels {
+		if err = c.Delete(label); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func _main() error {
 	var isHelp, isVersion bool
 	flag.BoolVar(&isHelp, "h", false, "")
@@ -102,15 +123,21 @@ func _main() error {
 	flag.BoolVar(&isVersion, "v", false, "")
 	flag.BoolVar(&isVersion, "version", false, "")
 
-	var isGet, isSet, isLabels bool
+	var isGet, isSet, isLabels, isDelete bool
 	flag.BoolVar(&isGet, "g", false, "")
 	flag.BoolVar(&isGet, "get", false, "")
 	flag.BoolVar(&isSet, "s", false, "")
 	flag.BoolVar(&isSet, "set", false, "")
 	flag.BoolVar(&isLabels, "l", false, "")
 	flag.BoolVar(&isLabels, "labels", false, "")
+	flag.BoolVar(&isDelete, "d", false, "")
+	flag.BoolVar(&isDelete, "delete", false, "")
 	flag.Usage = usage
 	flag.Parse()
+
+	if flag.NFlag() > 1 {
+		return fmt.Errorf("cannot specify more than one command")
+	}
 	switch {
 	case isHelp:
 		usage()
@@ -118,18 +145,14 @@ func _main() error {
 	case isVersion:
 		version()
 		return nil
-	}
-
-	if (isGet && isSet) || (isSet && isLabels) || (isLabels && isGet) {
-		return fmt.Errorf("cannot specify more than one command")
-	}
-	switch {
 	case isGet:
 		return cmd_get(flag.Args())
 	case isSet:
 		return cmd_set(flag.Args())
 	case isLabels:
 		return cmd_labels()
+	case isDelete:
+		return cmd_delete(flag.Args())
 	}
 	usage()
 	return nil
