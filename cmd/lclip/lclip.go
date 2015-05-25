@@ -84,7 +84,10 @@ func cmd_labels() error {
 	}
 	defer c.Close()
 
-	labels := c.Labels()
+	labels, err := c.Labels()
+	if err != nil {
+		return err
+	}
 	sort.Strings(labels)
 	for _, label := range labels {
 		fmt.Println(label)
