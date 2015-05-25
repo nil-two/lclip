@@ -117,7 +117,10 @@ func TestListLabels(t *testing.T) {
 		}
 
 		expect := append(make([]string, 0, len(labels)), labels...)
-		actual := c.Labels()
+		actual, err := c.Labels()
+		if err != nil {
+			t.Fatal(err)
+		}
 		sort.Strings(expect)
 		sort.Strings(actual)
 		if !reflect.DeepEqual(actual, expect) {
