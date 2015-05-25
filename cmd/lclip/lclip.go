@@ -32,7 +32,7 @@ v0.3.0
 
 func cmdGet(args []string) error {
 	if len(args) < 1 {
-		return fmt.Errorf("no specify LABEL")
+		return fmt.Errorf("no specify label")
 	}
 	label := args[0]
 
@@ -54,7 +54,7 @@ func cmdGet(args []string) error {
 
 func cmdSet(args []string) error {
 	if len(args) < 1 {
-		return fmt.Errorf("no specify LABEL")
+		return fmt.Errorf("no specify label")
 	}
 	label := args[0]
 
@@ -96,7 +96,7 @@ func cmdLabels() error {
 
 func cmdDelete(args []string) error {
 	if len(args) < 1 {
-		return fmt.Errorf("no specify LABEL")
+		return fmt.Errorf("no specify label")
 	}
 	labels := args
 
