@@ -79,9 +79,16 @@ func TestSetText(t *testing.T) {
 	}
 	defer c.Close()
 	for _, test := range indexTestsAccess {
-		c.Set(test.Label, test.Data)
+		if err = c.Set(test.Label, test.Data); err != nil {
+			t.Error("Set(%q) returns %q; want nil",
+				test.Label, err)
+		}
 		expect := test.Data
-		actual := c.Get(test.Label)
+		actual, err := c.Get(test.Label)
+		if err != nil {
+			t.Error("Get(%q) returns %q; want nil",
+				test.Label, err)
+		}
 		if !reflect.DeepEqual(actual, expect) {
 			t.Errorf("after Set(%q, %q), Get(%q) = %q; want %q",
 				test.Label, test.Data,
@@ -104,7 +111,9 @@ func TestListLabels(t *testing.T) {
 			t.Fatal(err)
 		}
 		for _, label := range labels {
-			c.Set(label, []byte(``))
+			if err = c.Set(label, []byte(``)); err != nil {
+				t.Fatal(err)
+			}
 		}
 
 		expect := append(make([]string, 0, len(labels)), labels...)
@@ -129,7 +138,9 @@ func TestSave(t *testing.T) {
 			t.Fatal(err)
 		}
 		for _, test := range indexTestsAccess {
-			c.Set(test.Label, test.Data)
+			if err := c.Set(test.Label, test.Data); err != nil {
+				t.Fatal(err)
+			}
 		}
 		if err := c.Close(); err != nil {
 			t.Fatal(err)
@@ -143,7 +154,10 @@ func TestSave(t *testing.T) {
 		defer c.Close()
 		for _, test := range indexTestsAccess {
 			expect := test.Data
-			actual := c.Get(test.Label)
+			actual, err := c.Get(test.Label)
+			if err != nil {
+				t.Fatal(err)
+			}
 			if !reflect.DeepEqual(actual, expect) {
 				t.Errorf("Get(%q) = %q; want %q",
 					test.Label, actual, expect)
