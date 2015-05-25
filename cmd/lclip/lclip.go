@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"sort"
 
 	"github.com/gonuts/commander"
 	"github.com/kusabashira/lclip"
@@ -35,7 +36,7 @@ var cmd_get = &commander.Command{
 		if _, err = os.Stdout.Write([]byte("\n")); err != nil {
 			return err
 		}
-		return nil
+		return c.Close()
 	},
 }
 
@@ -67,6 +68,28 @@ var cmd_set = &commander.Command{
 		}
 
 		c.Set(label, src)
+		return c.Close()
+	},
+}
+
+var cmd_labels = &commander.Command{
+	UsageLine: "labels",
+	Short:     "list labels",
+	Run: func(cmd *commander.Command, args []string) error {
+		path, err := lclip.DefaultPath()
+		if err != nil {
+			return err
+		}
+		c, err := lclip.NewClipboard(path)
+		if err != nil {
+			return err
+		}
+
+		labels := c.Labels()
+		sort.Strings(labels)
+		for _, label := range labels {
+			fmt.Println(label)
+		}
 		return c.Close()
 	},
 }
