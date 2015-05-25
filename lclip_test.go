@@ -36,7 +36,7 @@ func TestDefaultPath(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	expect := filepath.Join(h, ".lclip.json")
+	expect := filepath.Join(h, ".lclip.db")
 	actual, err := DefaultPath()
 	if err != nil {
 		t.Errorf("DefaultPath returns %q; want nil", err)
