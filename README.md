@@ -14,8 +14,8 @@ Usage
 
 	$ lclip <operation> [...]
 	operations:
-		lclip {-h --help}
-		lclip {-v --version}
+		lclip {-h --help}                      # Show this help message
+		lclip {-v --version}                   # Print the version
 		lclip {-l --labels}                    # List labels
 		lclip {-g --get}     <label>           # Paste text from label
 		lclip {-s --set}     <label> [file(s)] # Copy text to label
