@@ -132,6 +132,31 @@ func TestListLabels(t *testing.T) {
 	}
 }
 
+func TestDeleteLabel(t *testing.T) {
+	os.Remove(tempPath)
+
+	c, err := NewClipboard(tempPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err = c.Set("foo", []byte("")); err != nil {
+		t.Fatal(err)
+	}
+	if err = c.Delete("foo"); err != nil {
+		t.Fatal(err)
+	}
+
+	expect := make([]string, 0)
+	actual, err := c.Labels()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !reflect.DeepEqual(actual, expect) {
+		t.Errorf("got %q; want %q",
+			actual, expect)
+	}
+}
+
 func TestSave(t *testing.T) {
 	os.Remove(tempPath)
 
