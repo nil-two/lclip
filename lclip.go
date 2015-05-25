@@ -51,6 +51,18 @@ func NewClipboard(path string) (*Clipboard, error) {
 	return c, nil
 }
 
+func NewClipboardWithDefaultPath() (*Clipboard, error) {
+	path, err := DefaultPath()
+	if err != nil {
+		return nil, err
+	}
+	return NewClipboard(path)
+}
+
+func (c *Clipboard) Path() string {
+	return c.path
+}
+
 func (c *Clipboard) Get(label string) ([]byte, error) {
 	return c.storage[label], nil
 }
