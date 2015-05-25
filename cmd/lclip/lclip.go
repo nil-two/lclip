@@ -33,9 +33,6 @@ var cmd_get = &commander.Command{
 		if _, err = os.Stdout.Write(dst); err != nil {
 			return err
 		}
-		if _, err = os.Stdout.Write([]byte("\n")); err != nil {
-			return err
-		}
 		return c.Close()
 	},
 }
