@@ -94,5 +94,19 @@ var cmd_labels = &commander.Command{
 	},
 }
 
+var command = &commander.Command{
+	UsageLine: "lclip",
+	Short:     "cli interface for labeled clipboard",
+	Subcommands: []*commander.Command{
+		cmd_get,
+		cmd_set,
+		cmd_labels,
+	},
+}
+
 func main() {
+	if err := command.Dispatch(os.Args[1:]); err != nil {
+		fmt.Fprintln(os.Stderr, "lclip:", err)
+		os.Exit(1)
+	}
 }
