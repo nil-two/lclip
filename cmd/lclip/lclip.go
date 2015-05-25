@@ -37,20 +37,20 @@ func cmd_get(args []string) error {
 	}
 	label := args[0]
 
-	path, err := lclip.DefaultPath()
+	c, err := lclip.NewClipboardWithDefaultPath()
 	if err != nil {
 		return err
 	}
-	c, err := lclip.NewClipboard(path)
-	if err != nil {
-		return err
-	}
+	defer c.Close()
 
-	dst := c.Get(label)
+	dst, err := c.Get(label)
+	if err != nil {
+		return err
+	}
 	if _, err = os.Stdout.Write(dst); err != nil {
 		return err
 	}
-	return c.Close()
+	return nil
 }
 
 func cmd_set(args []string) error {
@@ -59,14 +59,11 @@ func cmd_set(args []string) error {
 	}
 	label := args[0]
 
-	path, err := lclip.DefaultPath()
+	c, err := lclip.NewClipboardWithDefaultPath()
 	if err != nil {
 		return err
 	}
-	c, err := lclip.NewClipboard(path)
-	if err != nil {
-		return err
-	}
+	defer c.Close()
 
 	r, err := argf.From(args[1:])
 	if err != nil {
@@ -77,26 +74,22 @@ func cmd_set(args []string) error {
 		return err
 	}
 
-	c.Set(label, src)
-	return c.Close()
+	return c.Set(label, src)
 }
 
 func cmd_labels() error {
-	path, err := lclip.DefaultPath()
+	c, err := lclip.NewClipboardWithDefaultPath()
 	if err != nil {
 		return err
 	}
-	c, err := lclip.NewClipboard(path)
-	if err != nil {
-		return err
-	}
+	defer c.Close()
 
 	labels := c.Labels()
 	sort.Strings(labels)
 	for _, label := range labels {
 		fmt.Println(label)
 	}
-	return c.Close()
+	return nil
 }
 
 func _main() error {
