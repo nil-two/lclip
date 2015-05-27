@@ -25,6 +25,11 @@ Usage
 Installation
 ------------
 
+###compiled binary
+
+See [releases](https://github.com/kusabashira/lclip/releases)
+
+
 ###go get
 
 	go get github.com/kusabashira/lclip/cmd/lclip
