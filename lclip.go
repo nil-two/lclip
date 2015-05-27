@@ -70,28 +70,28 @@ func (c *Clipboard) searchVariable(label string) (*Variable, error) {
 	return &res[0], nil
 }
 
-func (c *Clipboard) Get(label string) ([]byte, error) {
+func (c *Clipboard) Get(label string) []byte {
 	v, err := c.searchVariable(label)
 	if err != nil {
-		return nil, err
+		return nil
 	}
 	if v == nil {
-		return []byte(``), nil
+		return []byte(``)
 	}
-	return v.Data, nil
+	return v.Data
 }
 
-func (c *Clipboard) Set(label string, data []byte) error {
+func (c *Clipboard) Set(label string, data []byte) {
 	v, err := c.searchVariable(label)
 	if err != nil {
-		return err
+		return
 	}
 	if v == nil {
 		_, err = c.db.Insert(&Variable{Label: label, Data: data})
-		return err
+		return
 	}
 	_, err = c.db.Update(&Variable{Label: v.Label, Data: data})
-	return err
+	return
 }
 
 func (c *Clipboard) Labels() []string {
