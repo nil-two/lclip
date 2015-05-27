@@ -20,7 +20,10 @@ func TestMain(m *testing.M) {
 		fmt.Fprintln(os.Stderr, "lclip_test:", err)
 		return
 	}
-	f.Close()
+	if err := f.Close(); err != nil {
+		fmt.Fprintln(os.Stderr, "lclip_test:", err)
+		return
+	}
 	tempPath = f.Name()
 
 	e := m.Run()
@@ -34,6 +37,7 @@ func TestDefaultPath(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+
 	expect := filepath.Join(h, ".lclip.json")
 	actual, err := DefaultPath()
 	if err != nil {
@@ -78,8 +82,10 @@ func TestAccess(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer c.Close()
+
 	for _, test := range indexTestsAccess {
 		c.Set(test.Label, test.Data)
+
 		expect := test.Data
 		actual := c.Get(test.Label)
 		if !reflect.DeepEqual(actual, expect) {
@@ -114,6 +120,7 @@ func TestListLabels(t *testing.T) {
 		if !reflect.DeepEqual(actual, expect) {
 			t.Errorf("got %q; want %q", actual, expect)
 		}
+
 		if err := c.Close(); err != nil {
 			t.Fatal(err)
 		}
@@ -145,31 +152,30 @@ func TestDeleteLabel(t *testing.T) {
 func TestSave(t *testing.T) {
 	os.Remove(tempPath)
 
-	{
-		c, err := NewClipboard(tempPath)
-		if err != nil {
-			t.Fatal(err)
-		}
-		for _, test := range indexTestsAccess {
-			c.Set(test.Label, test.Data)
-		}
-		if err := c.Close(); err != nil {
-			t.Fatal(err)
+	c, err := NewClipboard(tempPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, test := range indexTestsAccess {
+		c.Set(test.Label, test.Data)
+	}
+	if err := c.Close(); err != nil {
+		t.Fatal(err)
+	}
+
+	c, err = NewClipboard(tempPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer c.Close()
+
+	for _, test := range indexTestsAccess {
+		expect := test.Data
+		actual := c.Get(test.Label)
+		if !reflect.DeepEqual(actual, expect) {
+			t.Errorf("Get(%q) = %q; want %q",
+				test.Label, actual, expect)
 		}
 	}
-	{
-		c, err := NewClipboard(tempPath)
-		if err != nil {
-			t.Fatal(err)
-		}
-		defer c.Close()
-		for _, test := range indexTestsAccess {
-			expect := test.Data
-			actual := c.Get(test.Label)
-			if !reflect.DeepEqual(actual, expect) {
-				t.Errorf("Get(%q) = %q; want %q",
-					test.Label, actual, expect)
-			}
-		}
-	}
+
 }
