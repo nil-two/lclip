@@ -117,10 +117,7 @@ func TestListLabels(t *testing.T) {
 		}
 
 		expect := append(make([]string, 0, len(labels)), labels...)
-		actual, err := c.Labels()
-		if err != nil {
-			t.Fatal(err)
-		}
+		actual := c.Labels()
 		sort.Strings(expect)
 		sort.Strings(actual)
 		if !reflect.DeepEqual(actual, expect) {
@@ -147,10 +144,7 @@ func TestDeleteLabel(t *testing.T) {
 	}
 
 	expect := make([]string, 0)
-	actual, err := c.Labels()
-	if err != nil {
-		t.Fatal(err)
-	}
+	actual := c.Labels()
 	if !reflect.DeepEqual(actual, expect) {
 		t.Errorf("got %q; want %q",
 			actual, expect)
