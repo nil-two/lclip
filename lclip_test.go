@@ -137,9 +137,7 @@ func TestDeleteLabel(t *testing.T) {
 	defer c.Close()
 
 	c.Set("foo", []byte(""))
-	if err = c.Delete("foo"); err != nil {
-		t.Fatal(err)
-	}
+	c.Delete("foo")
 
 	expect := make([]string, 0)
 	actual := c.Labels()
