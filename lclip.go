@@ -94,16 +94,16 @@ func (c *Clipboard) Set(label string, data []byte) error {
 	return err
 }
 
-func (c *Clipboard) Labels() ([]string, error) {
+func (c *Clipboard) Labels() []string {
 	res := make([]Variable, 0)
 	if err := c.db.Select(&res); err != nil {
-		return nil, err
+		return nil
 	}
 	labels := make([]string, len(res))
 	for i := 0; i < len(res); i++ {
 		labels[i] = res[i].Label
 	}
-	return labels, nil
+	return labels
 }
 
 func (c *Clipboard) Delete(label string) error {
