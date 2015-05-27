@@ -72,9 +72,8 @@ func (c *Clipboard) Labels() []string {
 	return labels
 }
 
-func (c *Clipboard) Delete(label string) error {
+func (c *Clipboard) Delete(label string) {
 	delete(c.storage, label)
-	return nil
 }
 
 func (c *Clipboard) Close() error {
