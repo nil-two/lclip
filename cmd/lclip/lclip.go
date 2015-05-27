@@ -42,10 +42,7 @@ func cmdGet(args []string) error {
 	}
 	defer c.Close()
 
-	dst, err := c.Get(label)
-	if err != nil {
-		return err
-	}
+	dst := c.Get(label)
 	if _, err = os.Stdout.Write(dst); err != nil {
 		return err
 	}
@@ -73,7 +70,8 @@ func cmdSet(args []string) error {
 		return err
 	}
 
-	return c.Set(label, src)
+	c.Set(label, src)
+	return nil
 }
 
 func cmdLabels() error {
@@ -83,10 +81,7 @@ func cmdLabels() error {
 	}
 	defer c.Close()
 
-	labels, err := c.Labels()
-	if err != nil {
-		return err
-	}
+	labels := c.Labels()
 	sort.Strings(labels)
 	for _, label := range labels {
 		fmt.Println(label)
@@ -107,9 +102,7 @@ func cmdDelete(args []string) error {
 	defer c.Close()
 
 	for _, label := range labels {
-		if err = c.Delete(label); err != nil {
-			return err
-		}
+		c.Delete(label)
 	}
 	return nil
 }
