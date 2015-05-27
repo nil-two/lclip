@@ -70,7 +70,7 @@ var indexTestsAccess = []AccessTest{
 	{Label: "日本語", Data: []byte("日本語")},
 }
 
-func TestSetText(t *testing.T) {
+func TestAccess(t *testing.T) {
 	os.Remove(tempPath)
 
 	c, err := NewClipboard(tempPath)
@@ -79,16 +79,9 @@ func TestSetText(t *testing.T) {
 	}
 	defer c.Close()
 	for _, test := range indexTestsAccess {
-		if err = c.Set(test.Label, test.Data); err != nil {
-			t.Error("Set(%q) returns %q; want nil",
-				test.Label, err)
-		}
+		c.Set(test.Label, test.Data)
 		expect := test.Data
-		actual, err := c.Get(test.Label)
-		if err != nil {
-			t.Error("Get(%q) returns %q; want nil",
-				test.Label, err)
-		}
+		actual := c.Get(test.Label)
 		if !reflect.DeepEqual(actual, expect) {
 			t.Errorf("after Set(%q, %q), Get(%q) = %q; want %q",
 				test.Label, test.Data,
@@ -111,9 +104,7 @@ func TestListLabels(t *testing.T) {
 			t.Fatal(err)
 		}
 		for _, label := range labels {
-			if err = c.Set(label, []byte(``)); err != nil {
-				t.Fatal(err)
-			}
+			c.Set(label, []byte(``))
 		}
 
 		expect := append(make([]string, 0, len(labels)), labels...)
@@ -136,9 +127,9 @@ func TestDeleteLabel(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err = c.Set("foo", []byte("")); err != nil {
-		t.Fatal(err)
-	}
+	defer c.Close()
+
+	c.Set("foo", []byte(""))
 	if err = c.Delete("foo"); err != nil {
 		t.Fatal(err)
 	}
@@ -160,9 +151,7 @@ func TestSave(t *testing.T) {
 			t.Fatal(err)
 		}
 		for _, test := range indexTestsAccess {
-			if err := c.Set(test.Label, test.Data); err != nil {
-				t.Fatal(err)
-			}
+			c.Set(test.Label, test.Data)
 		}
 		if err := c.Close(); err != nil {
 			t.Fatal(err)
@@ -176,10 +165,7 @@ func TestSave(t *testing.T) {
 		defer c.Close()
 		for _, test := range indexTestsAccess {
 			expect := test.Data
-			actual, err := c.Get(test.Label)
-			if err != nil {
-				t.Fatal(err)
-			}
+			actual := c.Get(test.Label)
 			if !reflect.DeepEqual(actual, expect) {
 				t.Errorf("Get(%q) = %q; want %q",
 					test.Label, actual, expect)
