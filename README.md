@@ -73,7 +73,7 @@ Delete label(s) from the storage.
 Other Specification
 -------------------
 
-- Storage path is `~/.lclip.db`
+- Storage path is `~/.lclip.json`
 - If not exist exists storage, storage will be created.
 
 
