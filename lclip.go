@@ -1,4 +1,4 @@
-package lclip
+package main
 
 import (
 	"encoding/json"

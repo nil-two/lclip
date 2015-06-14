@@ -7,7 +7,6 @@ import (
 	"os"
 	"sort"
 
-	"github.com/kusabashira/lclip"
 	"github.com/yuya-takeyama/argf"
 )
 
@@ -36,7 +35,7 @@ func cmdGet(args []string) error {
 	}
 	label := args[0]
 
-	c, err := lclip.NewClipboardWithDefaultPath()
+	c, err := NewClipboardWithDefaultPath()
 	if err != nil {
 		return err
 	}
@@ -55,7 +54,7 @@ func cmdSet(args []string) error {
 	}
 	label := args[0]
 
-	c, err := lclip.NewClipboardWithDefaultPath()
+	c, err := NewClipboardWithDefaultPath()
 	if err != nil {
 		return err
 	}
@@ -75,7 +74,7 @@ func cmdSet(args []string) error {
 }
 
 func cmdLabels() error {
-	c, err := lclip.NewClipboardWithDefaultPath()
+	c, err := NewClipboardWithDefaultPath()
 	if err != nil {
 		return err
 	}
@@ -95,7 +94,7 @@ func cmdDelete(args []string) error {
 	}
 	labels := args
 
-	c, err := lclip.NewClipboardWithDefaultPath()
+	c, err := NewClipboardWithDefaultPath()
 	if err != nil {
 		return err
 	}
