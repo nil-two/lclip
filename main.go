@@ -106,7 +106,7 @@ func cmdDelete(args []string) error {
 	return nil
 }
 
-func _main() error {
+func _main() int {
 	var isHelp, isVersion bool
 	flag.BoolVar(&isHelp, "h", false, "")
 	flag.BoolVar(&isHelp, "help", false, "")
@@ -125,32 +125,43 @@ func _main() error {
 	flag.Usage = usage
 	flag.Parse()
 
-	if flag.NFlag() > 1 {
-		return fmt.Errorf("cannot specify more than one command")
+	switch {
+	case flag.NFlag() == 0:
+		usage()
+		return 2
+	case flag.NFlag() > 1:
+		fmt.Fprintln(os.Stderr, "lclip: onflicting command specified")
+		return 2
 	}
+
 	switch {
 	case isHelp:
 		usage()
-		return nil
+		return 0
 	case isVersion:
 		version()
-		return nil
-	case isGet:
-		return cmdGet(flag.Args())
-	case isSet:
-		return cmdSet(flag.Args())
-	case isLabels:
-		return cmdLabels()
-	case isDelete:
-		return cmdDelete(flag.Args())
+		return 0
 	}
-	usage()
-	return nil
+
+	var err error
+	switch {
+	case isGet:
+		err = cmdGet(flag.Args())
+	case isSet:
+		err = cmdSet(flag.Args())
+	case isLabels:
+		err = cmdLabels()
+	case isDelete:
+		err = cmdDelete(flag.Args())
+	}
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "lclip:", err)
+		return 1
+	}
+	return 0
 }
 
 func main() {
-	if err := _main(); err != nil {
-		fmt.Fprintln(os.Stderr, "lclip:", err)
-		os.Exit(1)
-	}
+	e := _main()
+	os.Exit(e)
 }
