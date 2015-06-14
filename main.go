@@ -14,12 +14,12 @@ func usage() {
 	os.Stderr.WriteString(`
 usage: lclip <operation> [...]
 operations:
-	lclip {-h --help}                      # show this help message
-	lclip {-v --version}                   # print the version
-	lclip {-l --labels}                    # list labels
-	lclip {-g --get}    <label>            # paste text from label
-	lclip {-s --set}    <label> [file(s)]  # copy text to label
-	lclip {-d --delete} <label(s)>         # delete label(s)
+  lclip {-h --help}                      # show this help message
+  lclip {-v --version}                   # print the version
+  lclip {-l --labels}                    # list labels
+  lclip {-g --get}    <label>            # paste text from label
+  lclip {-s --set}    <label> [file(s)]  # copy text to label
+  lclip {-d --delete} <label(s)>         # delete label(s)
 `[1:])
 }
 
