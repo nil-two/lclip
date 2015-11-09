@@ -25,7 +25,7 @@ operations:
 
 func version() {
 	os.Stderr.WriteString(`
-v0.5.1
+0.5.1
 `[1:])
 }
 
