@@ -1,6 +1,8 @@
 lclip
 =====
 
+[![Build Status](https://travis-ci.org/kusabashira/lclip.svg?branch=master)](https://travis-ci.org/kusabashira/lclip)
+
 cli interface for labeled clipboard.
 
 	$ echo -e "Hello\nworld" | lclip -s hello
