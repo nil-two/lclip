@@ -130,7 +130,7 @@ func _main() int {
 		usage()
 		return 2
 	case flag.NFlag() > 1:
-		fmt.Fprintln(os.Stderr, "lclip: onflicting command specified")
+		fmt.Fprintln(os.Stderr, "lclip: conflicting command specified")
 		return 2
 	}
 
