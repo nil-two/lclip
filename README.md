@@ -29,11 +29,11 @@ operations:
 Installation
 ------------
 
-###compiled binary
+### compiled binary
 
 See [releases](https://github.com/kusabashira/lclip/releases)
 
-###go get
+### go get
 
 ```
 go get github.com/kusabashira/lclip
