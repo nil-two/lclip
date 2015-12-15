@@ -12,7 +12,6 @@ Hello
 world
 ```
 
-
 Usage
 -----
 
@@ -27,7 +26,6 @@ operations:
   lclip {-d --delete}  <label(s)>        # delete label(s)
 ```
 
-
 Installation
 ------------
 
@@ -35,13 +33,11 @@ Installation
 
 See [releases](https://github.com/kusabashira/lclip/releases)
 
-
 ###go get
 
 ```
 go get github.com/kusabashira/lclip
 ```
-
 
 Operations
 ----------
@@ -50,33 +46,27 @@ Operations
 
 Display a help message.
 
-
 ### -v, --version
 
 Display the version of lclip.
 
-
 ### -l, --labels
 
 List sorted labels.
-
 
 ### -g, --get *label*
 
 Paste text from label.
 If not exists label, paste a newline.
 
-
 ### -s, --set *label* *file(s)*
 
 Copy text to label.
 Read from file(s), or standard input, and nothing output.
 
-
 ### -d, --delete *label(s)*
 
 Delete label(s) from the storage.
-
 
 Other Specification
 -------------------
@@ -84,12 +74,10 @@ Other Specification
 - Storage path is `~/.lclip.json`
 - If not exist exists storage, storage will be created.
 
-
 License
 -------
 
 MIT License
-
 
 Author
 ------
