@@ -5,23 +5,27 @@ lclip
 
 cli interface for labeled clipboard.
 
-	$ echo -e "Hello\nworld" | lclip -s hello
-	$ lclip -g hello
-	Hello
-	world
+```
+$ echo -e "Hello\nworld" | lclip -s hello
+$ lclip -g hello
+Hello
+world
+```
 
 
 Usage
 -----
 
-	$ lclip <operation> [...]
-	operations:
-		lclip {-h --help}                      # show this help message
-		lclip {-v --version}                   # print the version
-		lclip {-l --labels}                    # list labels
-		lclip {-g --get}     <label>           # paste text from label
-		lclip {-s --set}     <label> [file(s)] # copy text to label
-		lclip {-d --delete}  <label(s)>        # delete label(s)
+```
+$ lclip <operation> [...]
+operations:
+  lclip {-h --help}                      # show this help message
+  lclip {-v --version}                   # print the version
+  lclip {-l --labels}                    # list labels
+  lclip {-g --get}     <label>           # paste text from label
+  lclip {-s --set}     <label> [file(s)] # copy text to label
+  lclip {-d --delete}  <label(s)>        # delete label(s)
+```
 
 
 Installation
@@ -34,7 +38,9 @@ See [releases](https://github.com/kusabashira/lclip/releases)
 
 ###go get
 
-	go get github.com/kusabashira/lclip
+```
+go get github.com/kusabashira/lclip
+```
 
 
 Operations
