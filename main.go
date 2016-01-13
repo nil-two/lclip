@@ -11,20 +11,21 @@ import (
 )
 
 var (
+	name    = "lclip"
 	version = "0.5.1"
 )
 
-func usage() {
-	os.Stderr.WriteString(`
-usage: lclip <operation> [...]
+func printUsage() {
+	fmt.Fprintf(os.Stderr, `
+usage: %[1]s <operation> [...]
 operations:
-  lclip {-h --help}                      # show this help message
-  lclip {-v --version}                   # print the version
-  lclip {-l --labels}                    # list labels
-  lclip {-g --get}    <label>            # paste text from label
-  lclip {-s --set}    <label> [file(s)]  # copy text to label
-  lclip {-d --delete} <label(s)>         # delete label(s)
-`[1:])
+  %[1]s {-h --help}                      # show this help message
+  %[1]s {-v --version}                   # print the version
+  %[1]s {-l --labels}                    # list labels
+  %[1]s {-g --get}    <label>            # paste text from label
+  %[1]s {-s --set}    <label> [file(s)]  # copy text to label
+  %[1]s {-d --delete} <label(s)>         # delete label(s)
+`[1:], name)
 }
 
 func printVersion() {
@@ -124,21 +125,21 @@ func _main() int {
 	flag.BoolVar(&isLabels, "labels", false, "")
 	flag.BoolVar(&isDelete, "d", false, "")
 	flag.BoolVar(&isDelete, "delete", false, "")
-	flag.Usage = usage
+	flag.Usage = printUsage
 	flag.Parse()
 
 	switch {
 	case flag.NFlag() == 0:
-		usage()
+		printUsage()
 		return 2
 	case flag.NFlag() > 1:
-		fmt.Fprintln(os.Stderr, "lclip: conflicting command specified")
+		fmt.Fprintf(os.Stderr, "%s: conflicting command specified\n", name)
 		return 2
 	}
 
 	switch {
 	case isHelp:
-		usage()
+		printUsage()
 		return 0
 	case isVersion:
 		printVersion()
@@ -157,7 +158,7 @@ func _main() int {
 		err = cmdDelete(flag.Args())
 	}
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "lclip:", err)
+		fmt.Fprintf(os.Stderr, "%s: %s\n", name, err)
 		return 1
 	}
 	return 0
