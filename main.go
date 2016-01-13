@@ -12,7 +12,7 @@ import (
 
 var (
 	name    = "lclip"
-	version = "0.5.1"
+	version = "0.5.2"
 )
 
 func printUsage() {
