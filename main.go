@@ -10,6 +10,10 @@ import (
 	"github.com/yuya-takeyama/argf"
 )
 
+var (
+	version = "0.5.1"
+)
+
 func usage() {
 	os.Stderr.WriteString(`
 usage: lclip <operation> [...]
@@ -23,10 +27,8 @@ operations:
 `[1:])
 }
 
-func version() {
-	os.Stderr.WriteString(`
-0.5.1
-`[1:])
+func printVersion() {
+	fmt.Fprintln(os.Stderr, version)
 }
 
 func cmdGet(args []string) error {
@@ -139,7 +141,7 @@ func _main() int {
 		usage()
 		return 0
 	case isVersion:
-		version()
+		printVersion()
 		return 0
 	}
 
