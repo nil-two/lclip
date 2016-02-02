@@ -15,6 +15,10 @@ func exists(path string) bool {
 }
 
 func DefaultPath() (string, error) {
+	path := os.Getenv("LCLIP_PATH")
+	if path != "" {
+		return path, nil
+	}
 	h, err := homedir.Dir()
 	if err != nil {
 		return "", err
