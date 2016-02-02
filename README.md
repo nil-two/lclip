@@ -68,10 +68,19 @@ Read from file(s), or standard input, and nothing output.
 
 Delete label(s) from the storage.
 
+Environment Variables
+---------------------
+
+### LCLIP\_PATH
+
+This variable specifies the storage path.
+The default is `~/.lclip.json`.
+
 Other Specification
 -------------------
 
-- Storage path is `~/.lclip.json`
+- Default storage path is `~/.lclip.json`
+  - You can change the storage path by setting `$LCLIP_PATH`
 - If not exist exists storage, storage will be created.
 
 License
