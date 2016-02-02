@@ -49,6 +49,24 @@ func TestDefaultPath(t *testing.T) {
 	}
 }
 
+func TestLCLIP_PATH(t *testing.T) {
+	original := os.Getenv("LCLIP_PATH")
+	defer os.Setenv("LCLIP_PATH", original)
+
+	if err := os.Setenv("LCLIP_PATH", tempPath); err != nil {
+		t.Fatalf("os.SetEnv(%q) returns %s", "LCLIP_PATH", err)
+	}
+	expect := tempPath
+	actual, err := DefaultPath()
+	if err != nil {
+		t.Fatalf("DefaultPath returns %s, want nil", err)
+	}
+	if actual != expect {
+		t.Errorf("DefaultPath = %q, want %q",
+			actual, expect)
+	}
+}
+
 func TestCreateStorageFileIfNotExists(t *testing.T) {
 	os.Remove(tempPath)
 
