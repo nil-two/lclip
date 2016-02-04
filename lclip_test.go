@@ -35,13 +35,15 @@ func TestMain(m *testing.M) {
 func TestDefaultPath(t *testing.T) {
 	h, err := homedir.Dir()
 	if err != nil {
-		t.Fatalf("homeder.Dir returns %q, want nil", err)
+		t.Errorf("homeder.Dir returns %q, want nil", err)
+		return
 	}
 
 	expect := filepath.Join(h, ".lclip.json")
 	actual, err := DefaultPath()
 	if err != nil {
 		t.Errorf("DefaultPath returns %q; want nil", err)
+		return
 	}
 	if actual != expect {
 		t.Errorf("DefaultPath = %q; want %q",
@@ -54,12 +56,14 @@ func TestLCLIP_PATH(t *testing.T) {
 	defer os.Setenv("LCLIP_PATH", original)
 
 	if err := os.Setenv("LCLIP_PATH", tempPath); err != nil {
-		t.Fatalf("os.SetEnv(%q) returns %s", "LCLIP_PATH", err)
+		t.Errorf("os.SetEnv(%q) returns %s", "LCLIP_PATH", err)
+		return
 	}
 	expect := tempPath
 	actual, err := DefaultPath()
 	if err != nil {
-		t.Fatalf("DefaultPath returns %s, want nil", err)
+		t.Errorf("DefaultPath returns %s, want nil", err)
+		return
 	}
 	if actual != expect {
 		t.Errorf("DefaultPath = %q, want %q",
@@ -72,7 +76,8 @@ func TestCreateStorageFileIfNotExists(t *testing.T) {
 
 	c, err := NewClipboard(tempPath)
 	if err != nil {
-		t.Fatalf("NewClipboard returns %q ,want nil", err)
+		t.Errorf("NewClipboard returns %q ,want nil", err)
+		return
 	}
 	defer c.Close()
 
@@ -97,7 +102,8 @@ func TestAccess(t *testing.T) {
 
 	c, err := NewClipboard(tempPath)
 	if err != nil {
-		t.Fatalf("NewClipboard returns %q ,want nil", err)
+		t.Errorf("NewClipboard returns %q ,want nil", err)
+		return
 	}
 	defer c.Close()
 
@@ -125,7 +131,8 @@ func TestListLabels(t *testing.T) {
 
 		c, err := NewClipboard(tempPath)
 		if err != nil {
-			t.Fatalf("NewClipboard returns %q ,want nil", err)
+			t.Errorf("NewClipboard returns %q ,want nil", err)
+			continue
 		}
 		for _, label := range labels {
 			c.Set(label, []byte(``))
@@ -137,10 +144,11 @@ func TestListLabels(t *testing.T) {
 		sort.Strings(actual)
 		if !reflect.DeepEqual(actual, expect) {
 			t.Errorf("got %q; want %q", actual, expect)
+			continue
 		}
 
 		if err := c.Close(); err != nil {
-			t.Fatalf("Clipboard.Close returns %q, want nil", err)
+			t.Errorf("Clipboard.Close returns %q, want nil", err)
 		}
 	}
 }
@@ -150,7 +158,8 @@ func TestDeleteLabel(t *testing.T) {
 
 	c, err := NewClipboard(tempPath)
 	if err != nil {
-		t.Fatalf("NewClipboard returns %q ,want nil", err)
+		t.Errorf("NewClipboard returns %q ,want nil", err)
+		return
 	}
 	defer c.Close()
 
@@ -170,18 +179,21 @@ func TestSave(t *testing.T) {
 
 	c, err := NewClipboard(tempPath)
 	if err != nil {
-		t.Fatalf("NewClipboard returns %q ,want nil", err)
+		t.Errorf("NewClipboard returns %q ,want nil", err)
+		return
 	}
 	for _, test := range indexTestsAccess {
 		c.Set(test.Label, test.Data)
 	}
 	if err := c.Close(); err != nil {
-		t.Fatalf("Clipboard.Close returns %q ,want nil", err)
+		t.Errorf("Clipboard.Close returns %q ,want nil", err)
+		return
 	}
 
 	c, err = NewClipboard(tempPath)
 	if err != nil {
-		t.Fatalf("NewClipboard returns %q ,want nil", err)
+		t.Errorf("NewClipboard returns %q ,want nil", err)
+		return
 	}
 	defer c.Close()
 
