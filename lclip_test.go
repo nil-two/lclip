@@ -35,7 +35,7 @@ func TestMain(m *testing.M) {
 func TestDefaultPath(t *testing.T) {
 	h, err := homedir.Dir()
 	if err != nil {
-		t.Fatal(err)
+		t.Fatalf("homeder.Dir returns %q, want nil", err)
 	}
 
 	expect := filepath.Join(h, ".lclip.json")
@@ -72,7 +72,7 @@ func TestCreateStorageFileIfNotExists(t *testing.T) {
 
 	c, err := NewClipboard(tempPath)
 	if err != nil {
-		t.Fatal(err)
+		t.Fatalf("NewClipboard returns %q ,want nil", err)
 	}
 	defer c.Close()
 
@@ -97,7 +97,7 @@ func TestAccess(t *testing.T) {
 
 	c, err := NewClipboard(tempPath)
 	if err != nil {
-		t.Fatal(err)
+		t.Fatalf("NewClipboard returns %q ,want nil", err)
 	}
 	defer c.Close()
 
@@ -125,7 +125,7 @@ func TestListLabels(t *testing.T) {
 
 		c, err := NewClipboard(tempPath)
 		if err != nil {
-			t.Fatal(err)
+			t.Fatalf("NewClipboard returns %q ,want nil", err)
 		}
 		for _, label := range labels {
 			c.Set(label, []byte(``))
@@ -140,7 +140,7 @@ func TestListLabels(t *testing.T) {
 		}
 
 		if err := c.Close(); err != nil {
-			t.Fatal(err)
+			t.Fatalf("Clipboard.Close returns %q, want nil", err)
 		}
 	}
 }
@@ -150,7 +150,7 @@ func TestDeleteLabel(t *testing.T) {
 
 	c, err := NewClipboard(tempPath)
 	if err != nil {
-		t.Fatal(err)
+		t.Fatalf("NewClipboard returns %q ,want nil", err)
 	}
 	defer c.Close()
 
@@ -170,18 +170,18 @@ func TestSave(t *testing.T) {
 
 	c, err := NewClipboard(tempPath)
 	if err != nil {
-		t.Fatal(err)
+		t.Fatalf("NewClipboard returns %q ,want nil", err)
 	}
 	for _, test := range indexTestsAccess {
 		c.Set(test.Label, test.Data)
 	}
 	if err := c.Close(); err != nil {
-		t.Fatal(err)
+		t.Fatalf("Clipboard.Close returns %q ,want nil", err)
 	}
 
 	c, err = NewClipboard(tempPath)
 	if err != nil {
-		t.Fatal(err)
+		t.Fatalf("NewClipboard returns %q ,want nil", err)
 	}
 	defer c.Close()
 
