@@ -3,7 +3,7 @@ lclip
 
 [![Build Status](https://travis-ci.org/kusabashira/lclip.svg?branch=master)](https://travis-ci.org/kusabashira/lclip)
 
-cli interface for labeled clipboard.
+CLI interface for labeled clipboard.
 
 ```
 $ echo -e "Hello\nworld" | lclip -s hello
@@ -44,7 +44,7 @@ Operations
 
 ### -h, --help
 
-Display a help message.
+Display the help message.
 
 ### -v, --version
 
@@ -57,12 +57,12 @@ List sorted labels.
 ### -g, --get *label*
 
 Paste text from label.
-If not exists label, paste a newline.
+If label doesn't exist, it paste a newline.
 
 ### -s, --set *label* *file(s)*
 
 Copy text to label.
-Read from file(s), or standard input, and nothing output.
+Read from file(s), or standard input.
 
 ### -d, --delete *label(s)*
 
@@ -79,9 +79,9 @@ The default is `~/.lclip.json`.
 Other Specification
 -------------------
 
-- Default storage path is `~/.lclip.json`
-  - You can change the storage path by setting `$LCLIP_PATH`
-- If not exist exists storage, storage will be created.
+- Default storage path is `~/.lclip.json`.
+  - You can change the storage path by setting `$LCLIP_PATH`.
+- Create storage if it doesn't exist.
 
 License
 -------
