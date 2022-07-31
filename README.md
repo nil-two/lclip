@@ -1,8 +1,6 @@
 lclip
 =====
 
-[![Build Status](https://travis-ci.org/kusabashira/lclip.svg?branch=master)](https://travis-ci.org/kusabashira/lclip)
-
 CLI interface for labeled clipboard.
 
 ```
@@ -31,12 +29,12 @@ Installation
 
 ### compiled binary
 
-See [releases](https://github.com/kusabashira/lclip/releases)
+See [releases](https://github.com/nil2nekoni/lclip/releases)
 
 ### go get
 
 ```
-go get github.com/kusabashira/lclip
+go get github.com/nil2nekoni/lclip
 ```
 
 Operations
@@ -91,4 +89,4 @@ MIT License
 Author
 ------
 
-kusabashira <kusabashira227@gmail.com>
+nil2 <nil2@nil2.org>
