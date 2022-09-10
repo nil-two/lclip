@@ -29,12 +29,12 @@ Installation
 
 ### compiled binary
 
-See [releases](https://github.com/nil2nekoni/lclip/releases)
+See [releases](https://github.com/nil-two/lclip/releases)
 
 ### go get
 
 ```
-go get github.com/nil2nekoni/lclip
+go get github.com/nil-two/lclip
 ```
 
 Operations
